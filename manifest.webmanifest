@@ -1,0 +1,14 @@
+{
+  "name": "雾岛 · 传讯",
+  "short_name": "雾岛",
+  "description": "梦角传讯：聊天、信件、KOMO。装到桌面上，切到后台也能收到提醒。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2fb",
+  "theme_color": "#627cff",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
