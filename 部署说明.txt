@@ -1,0 +1,35 @@
+静态网站回退包 · R216（未接入网易云版）
+========================================
+
+这是接入网易云方案 B 之前保存的原始 R216 前端。
+包内没有 Cloudflare Worker、Node 后端、环境变量或密钥，也没有网易云入口、设置项和同步代码。
+
+上传文件
+  index.html
+  sw.js
+  icon-192.png
+  icon-512.png
+  .nojekyll
+
+部署方法
+1. 将以上 5 个文件上传到静态网站的站点根目录，覆盖同名文件。
+2. 不要把本 zip 再套一层目录上传；index.html 应直接位于发布根目录。
+3. GitHub Pages：Settings → Pages → Deploy from a branch，选择 main / (root)。
+4. 发布后若仍看到旧界面，请强制刷新，或清除该站点的缓存后重开。
+
+云端清理（可选）
+- 静态前端已不再调用网易云后端。
+- 如果以后也不使用旧 Cloudflare Worker，可在 Cloudflare Dashboard 中单独停用或删除它。
+
+本地数据说明
+- 覆盖部署文件不会主动删除浏览器 localStorage / IndexedDB，原有聊天、音乐和设置数据会保留。
+- 如果你还想删除此前同步进浏览器的网易云歌单/歌曲，可清除该网站的站点数据；这也会同时删除该站点的其他本地数据，请先导出需要保留的内容。
+
+已知项
+- 沿用原版约定：没有 manifest.webmanifest。其 404 只影响 PWA“添加到主屏幕”，不影响普通静态网站使用。
+
+校验值（MD5）
+  index.html    1fdcfa7458bd4bef4388669067e63c10
+  sw.js         d48c068f9caaed1f686e6787f723d7b2
+  icon-192.png  b35ad759c5b9c7cfcdd8469e133b7b4a
+  icon-512.png  68e725062493bae9a338f58db5b0b3e6

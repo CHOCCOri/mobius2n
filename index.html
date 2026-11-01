@@ -15540,8 +15540,6 @@ html[data-theme="dark"] .chat-banner-row { background: rgba(28, 30, 36, .94); }
                 <label class="settings-field">悬浮样式<select class="settings-select" data-setting-path="music.floatStyle" aria-label="悬浮播放样式"><option value="bar">胶囊条 · 横贯窗底</option><option value="puck">唱片浮标 · 右下角</option></select></label>
                 <p class="settings-help">离开音乐 App 只是收起界面，歌照放。胶囊条把封面、歌名和上一首/播放/下一首摆在窗底；唱片浮标是右下角一颗会转的唱片，角标是播放键。</p>
                 <p class="settings-help">两种都能按住拖动摆位置；暂停满 15 秒会自动缩成更小一颗，点一下复原，长按 0.7 秒停止播放并收起。</p>
-                <label class="settings-toggle-row"><span class="settings-toggle-copy"><strong>网易云歌单同步（实验）</strong><small>默认关闭；开启后音乐 App 出现同步入口</small></span><span class="settings-switch"><input type="checkbox" data-setting-path="music.neteaseB" aria-label="启用网易云歌单同步"><i class="settings-switch-track"></i></span></label>
-                <p class="settings-help">方案 B 需要配套后端代理，密钥不会写进网页。关闭开关只隐藏入口，不删除已同步内容；如需清掉，可在同步面板里「移除网易云同步内容」。</p>
               </div>
             </details>
 
@@ -16875,73 +16873,6 @@ html[data-theme="dark"] .chat-banner-row { background: rgba(28, 30, 36, .94); }
 
 /* 短屏由 cqh 缩放自动处理 */
 
-/* ================= R217 · 网易云方案 B（默认关闭的可回退入口） ================= */
-.ic[hidden]{display:none}
-.ic.ncm{position:absolute;right:64px;top:calc(16px + env(safe-area-inset-top,0px));color:#8b8884}
-.ic.ncm svg{width:22px;height:22px}
-.ncm-sheet{position:absolute;inset:0;z-index:36;display:flex;align-items:flex-end}
-.ncm-sheet[hidden]{display:none}
-.ncm-scrim{position:absolute;inset:0;border:0;background:rgba(28,28,34,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);cursor:pointer}
-.ncm-panel{
-  position:relative;width:100%;max-height:88%;overflow-y:auto;overscroll-behavior:contain;
-  padding:20px 20px calc(22px + env(safe-area-inset-bottom,0px));
-  border-radius:28px 28px 0 0;background:rgba(252,252,253,.9);
-  border:1px solid rgba(255,255,255,.65);border-bottom:0;
-  box-shadow:0 -24px 60px -38px rgba(20,20,30,.55);
-  backdrop-filter:blur(26px) saturate(1.12);-webkit-backdrop-filter:blur(26px) saturate(1.12);
-  color:#3f3d3a;
-}
-.ncm-grip{width:38px;height:4px;border-radius:3px;background:rgba(120,120,130,.22);margin:0 auto 14px}
-.ncm-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
-.ncm-head h3{margin:0;font-size:15px;font-weight:650;letter-spacing:.08em}
-.ncm-close{width:32px;height:32px;border:0;border-radius:50%;background:rgba(120,120,130,.1);color:inherit;font-size:18px;line-height:1;cursor:pointer}
-.ncm-status{margin:0 0 12px;font-size:12px;line-height:1.7;color:#77746f;min-height:1.7em}
-.ncm-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:10.5px;background:rgba(98,124,255,.12);color:#5468d4;vertical-align:1px}
-.ncm-account{margin:0 0 12px;font-size:13px;color:#4f4d4a}
-.ncm-actions{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:12px}
-.ncm-btn{
-  min-height:40px;padding:0 15px;border:0;border-radius:14px;cursor:pointer;
-  background:rgba(120,120,130,.12);color:#4f4d4a;font-size:13px;letter-spacing:.04em;
-}
-.ncm-btn.primary{background:var(--theme-accent,#627cff);color:var(--on-accent,#fff)}
-.ncm-btn.danger{background:rgba(194,87,78,.12);color:#b04e45}
-.ncm-btn:disabled{opacity:.45;cursor:default}
-.ncm-list{display:flex;flex-direction:column;gap:7px;max-height:34vh;overflow-y:auto;margin:0 0 12px;padding:2px}
-.ncm-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:15px;background:rgba(255,255,255,.62);border:1px solid rgba(120,120,130,.12);cursor:pointer}
-.ncm-row input{width:17px;height:17px;accent-color:var(--theme-accent,#627cff);flex:0 0 auto}
-.ncm-row .ncm-name{flex:1;min-width:0;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ncm-row .ncm-count{font-size:11.5px;color:#98958f;flex:0 0 auto}
-.ncm-syncbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.ncm-all{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#77746f;cursor:pointer}
-.ncm-all input{accent-color:var(--theme-accent,#627cff)}
-.ncm-advanced{margin-top:6px;border-top:1px solid rgba(120,120,130,.14);padding-top:10px}
-.ncm-advanced summary{cursor:pointer;font-size:12.5px;color:#8b8884;letter-spacing:.04em}
-.ncm-advanced-body{display:flex;flex-direction:column;gap:9px;padding-top:10px}
-.ncm-diag{margin:0;padding:9px 10px;border-radius:10px;background:rgba(127,127,127,.12);font:11px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-all;max-height:260px;overflow:auto}
-.ncm-advanced label{font-size:12px;color:#77746f;display:flex;flex-direction:column;gap:6px}
-.ncm-advanced input[type="url"]{height:40px;border-radius:13px;border:1px solid rgba(120,120,130,.2);background:rgba(255,255,255,.7);padding:0 12px;font-size:13px;color:inherit;outline:none}
-.ncm-note{margin:12px 0 0;font-size:11.5px;line-height:1.8;color:#98958f}
-.ncm-link{color:#5468d4;word-break:break-all}
-/* R219 · Worker 模式内联扫码（不弹窗） */
-.ncm-qr{display:flex;flex-direction:column;align-items:center;gap:10px;margin:0 0 14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(120,120,130,.14)}
-.ncm-qr[hidden]{display:none}
-.ncm-qr img{width:212px;height:212px;border-radius:12px;background:#fff;padding:6px;image-rendering:pixelated}
-.ncm-qr-hint{margin:0;font-size:12.5px;line-height:1.7;color:#77746f;text-align:center}
-.ncm-qr-link{font-size:12px;color:#5468d4;word-break:break-all;text-align:center}
-.ncm-qr-cancel{min-height:34px;padding:0 14px;border:0;border-radius:12px;background:rgba(120,120,130,.12);color:#4f4d4a;font-size:12.5px;cursor:pointer}
-:host-context([data-theme="dark"]) .ncm-panel{background:rgba(28,28,32,.9);border-color:rgba(255,255,255,.1);color:#ececf0;box-shadow:0 -24px 60px -38px rgba(0,0,0,.8)}
-:host-context([data-theme="dark"]) .ncm-status,:host-context([data-theme="dark"]) .ncm-note{color:#a4a4ae}
-:host-context([data-theme="dark"]) .ncm-account{color:#d8d8de}
-:host-context([data-theme="dark"]) .ncm-btn{background:rgba(255,255,255,.1);color:#e6e6ec}
-:host-context([data-theme="dark"]) .ncm-btn.danger{background:rgba(220,110,100,.16);color:#e39a92}
-:host-context([data-theme="dark"]) .ncm-row{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.09)}
-:host-context([data-theme="dark"]) .ncm-row .ncm-count,:host-context([data-theme="dark"]) .ncm-all,:host-context([data-theme="dark"]) .ncm-advanced summary,:host-context([data-theme="dark"]) .ncm-advanced label{color:#a4a4ae}
-:host-context([data-theme="dark"]) .ncm-advanced input[type="url"]{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:#ececf0}
-:host-context([data-theme="dark"]) .ncm-badge{background:rgba(140,160,255,.18);color:#aebaff}
-:host-context([data-theme="dark"]) .ncm-qr{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)}
-:host-context([data-theme="dark"]) .ncm-qr-hint{color:#a4a4ae}
-:host-context([data-theme="dark"]) .ncm-qr-cancel{background:rgba(255,255,255,.1);color:#e6e6ec}
-
 
 </style>
 <div class="mapp" id="mapp">
@@ -16955,9 +16886,6 @@ html[data-theme="dark"] .chat-banner-row { background: rgba(28, 30, 36, .94); }
       </button>
       <button class="ic plus" id="addBtn" data-act="add" aria-label="添加歌曲">
         <svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>
-      </button>
-      <button class="ic ncm" id="neteaseBtn" hidden aria-label="网易云歌单同步" title="网易云歌单同步">
-        <svg viewBox="0 0 24 24"><path d="M7.2 17.2a4.3 4.3 0 0 1-.7-8.5 5.6 5.6 0 0 1 10.8-1.2 3.9 3.9 0 0 1 .4 7.8"/><path d="M12 11.5v7.2"/><path d="m9.4 16.1 2.6 2.6 2.6-2.6"/></svg>
       </button>
     </div>
     <div class="pl-body">
@@ -17108,49 +17036,6 @@ html[data-theme="dark"] .chat-banner-row { background: rgba(28, 30, 36, .94); }
   <div class="sheet" id="sheet" hidden>
     <button class="scrim" data-act="dismiss" aria-label="关闭"></button>
     <form class="panel" id="panel" autocomplete="off"></form>
-  </div>
-
-  <!-- ============ R217 · 网易云方案 B 同步面板（默认关闭） ============ -->
-  <div class="ncm-sheet" id="neteaseSheet" hidden>
-    <button class="ncm-scrim" id="neteaseScrim" type="button" aria-label="关闭网易云同步"></button>
-    <section class="ncm-panel" role="dialog" aria-modal="true" aria-labelledby="neteaseTitle">
-      <div class="ncm-grip" aria-hidden="true"></div>
-      <div class="ncm-head">
-        <h3 id="neteaseTitle">网易云歌单同步</h3>
-        <button class="ncm-close" id="neteaseClose" type="button" aria-label="关闭">×</button>
-      </div>
-      <p class="ncm-status" id="neteaseStatus" role="status" aria-live="polite">正在检查后端…</p>
-      <p class="ncm-account" id="neteaseAccount" hidden></p>
-      <div class="ncm-actions">
-        <button class="ncm-btn primary" id="neteaseLogin" type="button">登录网易云</button>
-        <button class="ncm-btn" id="neteaseRefresh" type="button">刷新状态</button>
-        <button class="ncm-btn" id="neteaseLogout" type="button" hidden>退出登录</button>
-      </div>
-      <div class="ncm-qr" id="neteaseQr" hidden>
-        <img id="neteaseQrImg" alt="网易云登录二维码" width="212" height="212">
-        <p class="ncm-qr-hint" id="neteaseQrHint">请用网易云音乐 App 扫描二维码</p>
-        <a class="ncm-qr-link" id="neteaseQrLink" href="#" target="_blank" rel="noopener noreferrer" hidden>在手机上打开授权链接</a>
-        <button class="ncm-qr-cancel" id="neteaseQrCancel" type="button">取消登录</button>
-      </div>
-      <div class="ncm-list" id="neteaseList" aria-label="可同步的网易云歌单"></div>
-      <div class="ncm-syncbar" id="neteaseSyncbar" hidden>
-        <label class="ncm-all"><input type="checkbox" id="neteaseSelectAll">全选</label>
-        <button class="ncm-btn primary" id="neteaseSync" type="button" disabled>同步所选歌单</button>
-      </div>
-      <details class="ncm-advanced">
-        <summary>高级设置</summary>
-        <div class="ncm-advanced-body">
-          <label>后端地址（留空 = 使用内置默认后端，访客一般无需填写）
-            <input type="text" inputmode="url" id="neteaseBase" placeholder="默认已内置；站长调试才需要改" autocomplete="off" spellcheck="false">
-          </label>
-          <button class="ncm-btn" id="neteaseSaveBase" type="button">保存后端地址</button>
-          <button class="ncm-btn" id="neteaseDiagnose" type="button">后端自检（站长）</button>
-          <pre class="ncm-diag" id="neteaseDiagOut" hidden></pre>
-          <button class="ncm-btn danger" id="neteaseRemove" type="button">移除网易云同步内容</button>
-        </div>
-      </details>
-      <p class="ncm-note">方案 B 只同步歌单 / 歌曲信息；不会解析 VIP 或版权直链。没有直链的歌会提示打开网易云官方页面。关闭设置里的开关只会隐藏入口，不会删除已同步内容。</p>
-    </section>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -19159,9 +19044,8 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
       notificationEnabled: true, notificationTone: 'soft', notificationVolume: 70, notificationFile: '', notificationFileName: '', notificationFileInDb: false,
       callEnabled: true, callTone: 'classic', callVolume: 70, callFile: '', callFileName: '', callFileInDb: false
     },
-    /* R173：离开音乐 app 后的悬浮播放形态 —— bar 胶囊条 / puck 唱片浮标
-       R217：网易云方案 B 为可选实验入口，默认关闭；关闭只隐藏入口，不删除已导入内容。 */
-    music: { floatStyle: 'bar', neteaseB: false },
+    /* R173：离开音乐 app 后的悬浮播放形态 —— bar 胶囊条 / puck 唱片浮标 */
+    music: { floatStyle: 'bar' },
     /* R201：不在会话里收到消息时从顶上滑下来的横幅 */
     banner: { enabled: true, dwell: 4500 },
     /* R202：页面切到后台时用系统通知兜住（file:// 或没授权时自动退回站内） */
@@ -20291,8 +20175,6 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
     const output = copyDefaultGlobalSettings();
     /* R173：悬浮播放形态只有两种，其余一律回落胶囊条 */
     if (music.floatStyle === 'puck' || music.floatStyle === 'bar') output.music.floatStyle = music.floatStyle;
-    /* R217：网易云方案 B 入口默认关闭；只接受布尔 true，旧备份/异常值一律回落关闭 */
-    output.music.neteaseB = music.neteaseB === true;
     /* R201：横幅开关与停留时长 */
     const banner = input.banner && typeof input.banner === 'object' ? input.banner : {};
     if (typeof banner.enabled === 'boolean') output.banner.enabled = banner.enabled;
@@ -28828,7 +28710,7 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
     const strip = (item) => {
       const cover = String(item.cover || '');
       const inline = !item.coverId && cover && !/^blob:/i.test(cover);
-      const out = {
+      return {
         id: item.id,
         title: item.title,
         artist: item.artist,
@@ -28839,15 +28721,6 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
         coverId: item.coverId || '',
         cover: inline ? cover : ''
       };
-      /* R217：网易云同步元数据必须随快照落盘，否则刷新后 provider / 官方链接会丢 */
-      if (item.provider) {
-        out.provider = String(item.provider);
-        out.neteaseId = String(item.neteaseId || '');
-        out.neteasePlaylistId = String(item.neteasePlaylistId || '');
-        out.neteaseUrl = String(item.neteaseUrl || '');
-        out.syncedAt = Number(item.syncedAt || 0);
-      }
-      return out;
     };
     return JSON.stringify({
       songs: DB.songs.map(strip),
@@ -29139,26 +29012,13 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
     DB.cur = id;
     save();
     renderPlay();
-    if (autoplay) { setTab('play'); play(true); }
+    if (autoplay) { setTab('play'); play(); }
   }
 
-  function play(userGesture) {
+  function play() {
     const t = curTrack();
     if (!t) { toast('先在 PLAYLIST 添加一首歌'); return; }
     const src = (t.src && /^(https?:|data:|blob:)/i.test(t.src)) ? t.src : '';
-    /* R217：网易云同步歌若没有合法直链，不假装播放；用户主动点播放时跳官方页。 */
-    if (!src && t.provider === 'netease') {
-      stopAudio();
-      playing = false;
-      renderIcon();
-      if (userGesture && t.neteaseUrl) {
-        try { window.open(t.neteaseUrl, '_blank', 'noopener'); } catch (e) {}
-        toast('这首歌暂无直链，已打开网易云');
-      } else {
-        toast('这首歌暂无直链，可在歌曲菜单打开网易云');
-      }
-      return;
-    }
     if (src) {
       try {
         if (aud.src !== src) aud.src = src;
@@ -29391,7 +29251,6 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
       <div class="menu">
         <button type="button" data-m="cover">换封面</button>
         <button type="button" data-m="src">换直链</button>
-        ${s.provider === 'netease' && s.neteaseUrl ? '<button type="button" data-m="netease">打开网易云官方页</button>' : ''}
         ${scope.length > 1 ? '<button type="button" data-m="order">调整顺序</button>' : ''}
         <button type="button" data-m="del" class="danger">删除这首歌</button>
       </div>
@@ -29407,7 +29266,6 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
         const m = b.dataset.m;
         if (m === 'cover') coverEditSheet(s.id);
         else if (m === 'src') srcEditSheet(s.id);
-        else if (m === 'netease') { try { window.open(s.neteaseUrl, '_blank', 'noopener'); } catch (e) {} }
         else if (m === 'order') { closeSheet(); setTimeout(() => openReorder(), 240); }
         else if (m === 'del') deleteSheet(s.id);
       });
@@ -29784,522 +29642,6 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
     });
   }
 
-  /* ================= R217 · 网易云方案 B（默认关闭 / 可回退 / 非破坏式同步） =================
-     - 入口开关在全局设置 music.neteaseB；默认 false，旧备份一律回落关闭。
-     - 密钥与 token 只在后端；前端只拿歌单 / 歌曲元数据。
-     - 同步使用稳定 id：歌单 ncm-pl-<id>，歌曲 ncm-s-<歌单id>-<歌曲id>。
-     - 只新增 / 更新 provider=netease 的条目；不碰本地手动歌曲，不解析版权直链。 */
-  const NCM_CONFIG_KEY = 'cg-music-netease-b-v1';
-  const NCM_SETTINGS_KEY = 'clear-glass-global-settings-v1';
-  /* R220 · 公开发布默认后端：访客不需要手动填写。
-     如果你给 Worker 绑定了自定义域名（大陆访问 workers.dev 常被拦截），
-     只需要把下面这一行改成 https://你的域名 并重新发布 index.html。
-     本地 localhost / 127.0.0.1 / 预览沙箱仍默认同域，方便旧 Node 后端测试。 */
-  const NCM_DEFAULT_BASE = 'https://mobius.2106903674mm.workers.dev';
-  function ncmDefaultBase() {
-    try {
-      const h = location.hostname;
-      if (location.protocol === 'file:') return NCM_DEFAULT_BASE;
-      if (h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h === '[::1]' || /\.e2b\.app$/.test(h)) return '';
-      return NCM_DEFAULT_BASE;
-    } catch (e) { return ''; }
-  }
-  /* R219 · Worker（云函数）模式：会话信封只放 sessionStorage，且绑定后端地址；
-     它不是明文 token，但仍按凭据对待：不进 localStorage / 备份 / 聊天记录。 */
-  const NCM_SESSION_KEY = 'cg-music-netease-b-session-v1';
-  const ncm = { base: '', health: null, playlists: [], selected: new Set(), busy: false, poll: null, open: false, lastFocus: null, removeArmed: false, transport: 'cookie', session: '', qrLoginId: '', qrBusy: false };
-
-  function ncmReadConfig() {
-    try {
-      const d = JSON.parse(localStorage.getItem(NCM_CONFIG_KEY) || '{}');
-      // R220：旧版“留空 = 同域”的空配置不再让公开站访客掉进同域；
-      // 只有明确保存 same-origin 时才强制同域，否则回落到内置默认后端。
-      ncm.base = (typeof d.base === 'string' && (d.base || d.sameOrigin === true)) ? d.base : ncmDefaultBase();
-    } catch (e) { ncm.base = ncmDefaultBase(); }
-    try {
-      const s = JSON.parse(sessionStorage.getItem(NCM_SESSION_KEY) || '{}');
-      ncm.session = (s && s.base === ncm.base && typeof s.session === 'string') ? s.session : '';
-    } catch (e) { ncm.session = ''; }
-    if (ncm.session) ncm.transport = 'bearer';
-  }
-  function ncmSaveConfig() {
-    try {
-      if (ncm.base === ncmDefaultBase()) localStorage.removeItem(NCM_CONFIG_KEY);
-      else localStorage.setItem(NCM_CONFIG_KEY, JSON.stringify({ base: ncm.base, sameOrigin: ncm.base === '' }));
-      return true;
-    } catch (e) { return false; }
-  }
-  function ncmBaseInputValue() {
-    if (ncm.base === '' && ncmDefaultBase() !== '') return 'same-origin';
-    return ncm.base;
-  }
-  function ncmSaveSession() {
-    try {
-      if (ncm.session) sessionStorage.setItem(NCM_SESSION_KEY, JSON.stringify({ base: ncm.base, session: ncm.session }));
-      else sessionStorage.removeItem(NCM_SESSION_KEY);
-      return true;
-    } catch (e) { return false; }
-  }
-  function ncmClearSession() {
-    ncm.session = '';
-    ncm.qrLoginId = '';
-    ncmSaveSession();
-  }
-  function ncmEnabled() {
-    try {
-      const d = JSON.parse(localStorage.getItem(NCM_SETTINGS_KEY) || '{}');
-      return !!(d.music && d.music.neteaseB === true);
-    } catch (e) { return false; }
-  }
-  function ncmApplyFlag() {
-    const btn = $('#neteaseBtn');
-    const on = ncmEnabled();
-    if (btn) btn.hidden = !on;
-    if (!on) ncmClose();
-  }
-  function ncmUrl(path) { return (ncm.base ? ncm.base.replace(/\/+$/, '') : '') + path; }
-  async function ncmFetch(path, opts = {}) {
-    if (location.protocol === 'file:' && !ncm.base) throw new Error('本地文件打开时，请先在高级设置填写后端地址');
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 15000);
-    const useBearer = ncm.transport === 'bearer' || !!(ncm.health && ncm.health.sessionTransport === 'bearer');
-    try {
-      const headers = Object.assign({}, opts.headers || {});
-      if (opts.method === 'POST') headers['x-ncm-request'] = '1';
-      if (useBearer && ncm.session) headers.authorization = 'Bearer ' + ncm.session;
-      const res = await fetch(ncmUrl(path), Object.assign({ credentials: useBearer ? 'omit' : 'include' }, opts, { headers, signal: ctrl.signal }));
-      const data = await res.json().catch(() => ({}));
-      if (useBearer && data && typeof data.session === 'string' && data.session) {
-        ncm.session = data.session;
-        ncmSaveSession();
-      }
-      if (!res.ok || data.ok === false) {
-        if (useBearer && res.status === 401 && path !== '/api/netease/health') ncmClearSession();
-        if (res.status === 403 && data.error === 'origin_not_allowed') throw new Error('后端拒绝了当前网站来源：请把当前域名加入 Worker 的 NCM_ALLOWED_ORIGIN');
-        throw new Error(data.error || ('HTTP ' + res.status));
-      }
-      return data;
-    } catch (e) {
-      if (ctrl.signal.aborted) throw new Error('连接后端超时：可能是网络无法访问 workers.dev（大陆常见），或后端地址/CORS 未配置好');
-      if (e && e.name === 'TypeError') throw new Error('无法连接后端：可能被跨域拦截、地址错误，或当前网络无法访问 workers.dev');
-      throw e;
-    } finally { clearTimeout(timer); }
-  }
-  function ncmStatus(msg, badge) {
-    const el = $('#neteaseStatus');
-    if (!el) return;
-    el.textContent = msg || '';
-    if (badge) {
-      const b = document.createElement('span');
-      b.className = 'ncm-badge';
-      b.textContent = badge;
-      el.append(document.createTextNode(' '), b);
-    }
-  }
-  function ncmRenderHealth() {
-    const h = ncm.health || {};
-    const login = $('#neteaseLogin');
-    const logout = $('#neteaseLogout');
-    const account = $('#neteaseAccount');
-    if (login) { login.disabled = !h.configured; login.textContent = h.loggedIn ? '重新登录' : '登录网易云'; }
-    if (logout) logout.hidden = !h.loggedIn;
-    if (account) {
-      account.hidden = !h.loggedIn;
-      account.textContent = h.loggedIn && h.user ? ('已登录：' + (h.user.nickname || '网易云用户') + (h.user.id ? '（' + h.user.id + '）' : '')) : '';
-    }
-    const isWorker = h.runtime === 'cloudflare-worker' || h.sessionTransport === 'bearer';
-    const badge = h.mode === 'mock' ? '演示模式' : (isWorker ? '云函数' : '官方接口');
-    if (!h.configured) {
-      const miss = Array.isArray(h.missing) && h.missing.length ? ('缺少：' + h.missing.join('、')) : '';
-      ncmStatus(isWorker ? ('云函数尚未配置完成。' + miss) : '后端尚未配置官方开放平台参数，请先填写 netease-b/.env。', h.mode === 'mock' ? '演示模式' : '');
-    } else if (h.loggedIn) {
-      if (h.capabilities && h.capabilities.playlists === false) ncmStatus('已登录，但云函数还没有配置歌单接口路径，暂时不能拉取歌单。', badge);
-      else ncmStatus('已连接，可以拉取并同步歌单。', badge);
-    } else {
-      ncmStatus(isWorker ? '云函数已就绪，请扫码登录网易云。' : '后端已就绪，请先登录网易云。', badge);
-    }
-  }
-  async function ncmRefreshHealth() {
-    ncmStatus('正在检查后端…');
-    try {
-      ncm.health = await ncmFetch('/api/netease/health');
-      ncm.transport = ncm.health.sessionTransport === 'bearer' ? 'bearer' : 'cookie';
-      if (ncm.transport !== 'bearer' && ncm.session) ncmClearSession();
-      if (ncm.transport === 'bearer' && !ncm.health.loggedIn && ncm.session) ncmClearSession();
-      ncmRenderHealth();
-      if (ncm.health.loggedIn && (!ncm.health.capabilities || ncm.health.capabilities.playlists !== false)) await ncmLoadPlaylists();
-      else { ncm.playlists = []; ncm.selected.clear(); ncmRenderList(); }
-    } catch (e) {
-      ncm.health = null;
-      ncmStatus('无法连接后端：' + (e && e.message ? e.message : e));
-      ncmRenderList();
-    }
-  }
-  function ncmRenderList() {
-    const box = $('#neteaseList');
-    const bar = $('#neteaseSyncbar');
-    const sync = $('#neteaseSync');
-    const all = $('#neteaseSelectAll');
-    if (!box) return;
-    box.replaceChildren();
-    const logged = !!(ncm.health && ncm.health.loggedIn);
-    const canTracks = !ncm.health || !ncm.health.capabilities || ncm.health.capabilities.tracks !== false;
-    if (bar) bar.hidden = !logged || !ncm.playlists.length;
-    ncm.playlists.forEach((p) => {
-      const row = document.createElement('label');
-      row.className = 'ncm-row';
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.value = p.id;
-      cb.checked = ncm.selected.has(p.id);
-      cb.addEventListener('change', () => {
-        if (cb.checked) ncm.selected.add(p.id); else ncm.selected.delete(p.id);
-        if (sync) sync.disabled = ncm.busy || !ncm.selected.size || !canTracks;
-        if (all) all.checked = ncm.playlists.length > 0 && ncm.selected.size === ncm.playlists.length;
-      });
-      const name = document.createElement('span');
-      name.className = 'ncm-name';
-      name.textContent = p.name || '未命名歌单';
-      const count = document.createElement('span');
-      count.className = 'ncm-count';
-      count.textContent = (p.trackCount || 0) + ' 首';
-      row.append(cb, name, count);
-      box.append(row);
-    });
-    if (sync) sync.disabled = ncm.busy || !ncm.selected.size || !canTracks;
-    if (all) all.checked = ncm.playlists.length > 0 && ncm.selected.size === ncm.playlists.length;
-  }
-  async function ncmLoadPlaylists() {
-    const data = await ncmFetch('/api/netease/playlists');
-    ncm.playlists = Array.isArray(data.playlists) ? data.playlists : [];
-    ncm.selected.clear();
-    ncmRenderList();
-  }
-  function ncmOpen() {
-    if (!ncmEnabled()) return;
-    const sheet = $('#neteaseSheet');
-    if (!sheet) return;
-    ncm.open = true;
-    ncm.lastFocus = ROOT.activeElement || $('#neteaseBtn');
-    sheet.hidden = false;
-    const base = $('#neteaseBase');
-    if (base) base.value = ncmBaseInputValue();
-    const close = $('#neteaseClose');
-    if (close) close.focus();
-    sheet.addEventListener('keydown', ncmKeydown);
-    ncmRefreshHealth();
-  }
-  function ncmStopQr() {
-    if (ncm.poll) { clearInterval(ncm.poll); ncm.poll = null; }
-    ncm.qrLoginId = '';
-    ncm.qrBusy = false;
-    const box = $('#neteaseQr');
-    if (box) box.hidden = true;
-    const img = $('#neteaseQrImg');
-    if (img) img.removeAttribute('src');
-    const link = $('#neteaseQrLink');
-    if (link) { link.hidden = true; link.removeAttribute('href'); }
-    const login = $('#neteaseLogin');
-    if (login) login.disabled = !(ncm.health && ncm.health.configured);
-  }
-  function ncmClose() {
-    const sheet = $('#neteaseSheet');
-    if (!sheet || sheet.hidden) return;
-    ncm.open = false;
-    sheet.hidden = true;
-    sheet.removeEventListener('keydown', ncmKeydown);
-    ncmStopQr();
-    if (ncm.lastFocus && typeof ncm.lastFocus.focus === 'function') ncm.lastFocus.focus();
-  }
-  function ncmKeydown(e) {
-    if (e.key === 'Escape') { e.preventDefault(); ncmClose(); return; }
-    if (e.key !== 'Tab') return;
-    const panel = $('#neteaseSheet .ncm-panel');
-    if (!panel) return;
-    const f = Array.from(panel.querySelectorAll('button,input,summary,[href]')).filter((el) => !el.disabled && el.offsetParent !== null);
-    if (!f.length) return;
-    const first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && ROOT.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && ROOT.activeElement === last) { e.preventDefault(); first.focus(); }
-  }
-  function ncmLogin() {
-    if (!ncm.health || !ncm.health.configured) return;
-    if (ncm.transport === 'bearer' || ncm.health.sessionTransport === 'bearer') { ncmLoginWorker(); return; }
-    const url = ncmUrl('/auth/netease/start');
-    const w = window.open(url, 'ncm-auth', 'width=520,height=680');
-    if (!w) { ncmStatus('弹窗被拦截，请允许弹窗后重试，或手动打开：' + url); return; }
-    ncmStatus('等待授权完成…');
-    if (ncm.poll) clearInterval(ncm.poll);
-    let tries = 0;
-    ncm.poll = setInterval(async () => {
-      tries += 1;
-      try {
-        const h = await ncmFetch('/api/netease/health');
-        if (h.loggedIn) {
-          clearInterval(ncm.poll); ncm.poll = null;
-          ncm.health = h; ncmRenderHealth();
-          await ncmLoadPlaylists();
-          return;
-        }
-      } catch (e) {}
-      if (tries > 90) { clearInterval(ncm.poll); ncm.poll = null; ncmStatus('授权等待超时，请点「刷新状态」。'); }
-    }, 1000);
-  }
-  /* R219 · 云函数模式：面板内联扫码 + 加密会话信封（不依赖第三方 Cookie / 弹窗） */
-  async function ncmLoginWorker() {
-    if (ncm.qrBusy) return;
-    ncm.qrBusy = true;
-    if (ncm.poll) { clearInterval(ncm.poll); ncm.poll = null; }
-    const login = $('#neteaseLogin');
-    if (login) login.disabled = true;
-    const box = $('#neteaseQr');
-    const img = $('#neteaseQrImg');
-    const hint = $('#neteaseQrHint');
-    const link = $('#neteaseQrLink');
-    if (box) box.hidden = false;
-    if (img) img.removeAttribute('src');
-    if (link) { link.hidden = true; link.removeAttribute('href'); }
-    if (hint) hint.textContent = '正在生成二维码…';
-    ncmStatus('正在请求登录二维码…');
-    try {
-      const start = await ncmFetch('/api/netease/qr/start', { method: 'POST' });
-      if (!ncm.open) { ncm.qrBusy = false; return; }
-      ncm.qrLoginId = String(start.loginId || '');
-      if (img && start.qr && start.qr.image) img.src = start.qr.image;
-      if (link && start.qr && start.qr.url) { link.href = start.qr.url; link.hidden = false; }
-      if (hint) hint.textContent = '请用网易云音乐 App 扫描二维码，并在手机上确认';
-      ncmStatus('等待扫码确认…');
-      let tries = 0;
-      let inFlight = false;
-      let errors = 0;
-      ncm.poll = setInterval(async () => {
-        if (inFlight || !ncm.qrLoginId) return;
-        inFlight = true;
-        tries += 1;
-        try {
-          const r = await ncmFetch('/api/netease/qr/poll', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ loginId: ncm.qrLoginId }),
-          });
-          errors = 0;
-          if (r.status === 'confirmed') {
-            ncm.session = String(r.session || '');
-            ncmSaveSession();
-            ncmStopQr();
-            ncmStatus('扫码成功，正在拉取歌单…');
-            await ncmRefreshHealth();
-            return;
-          }
-          if (r.status === 'scanned') { if (hint) hint.textContent = '已扫描，请在手机上确认登录'; }
-          else if (r.status === 'expired') { ncmStopQr(); ncmStatus('二维码已过期，请重新点击登录。'); return; }
-        } catch (e) {
-          errors += 1;
-          if (errors >= 4) { ncmStopQr(); ncmStatus('扫码轮询失败：' + (e && e.message ? e.message : e)); return; }
-        } finally { inFlight = false; }
-        if (tries > 100) { ncmStopQr(); ncmStatus('扫码等待超时，请重新点击登录。'); }
-      }, 3000);
-    } catch (e) {
-      ncmStopQr();
-      ncmStatus('获取二维码失败：' + (e && e.message ? e.message : e));
-    } finally { ncm.qrBusy = false; }
-  }
-  async function ncmLogout() {
-    const bearer = ncm.transport === 'bearer';
-    try {
-      await ncmFetch('/api/netease/logout', { method: 'POST' });
-    } catch (e) {
-      if (!bearer) { ncmStatus('退出失败：' + (e && e.message ? e.message : e)); return; }
-    }
-    if (bearer) ncmClearSession();
-    ncmStopQr();
-    ncm.health = null; ncm.playlists = []; ncm.selected.clear();
-    ncmRenderList();
-    await ncmRefreshHealth();
-  }
-  function ncmApplySync(batches) {
-    const before = { songs: DB.songs.map((s) => Object.assign({}, s)), playlists: DB.playlists.map((p) => Object.assign({}, p)), cur: DB.cur, sel: DB.sel };
-    let added = 0, updated = 0, skipped = 0;
-    const now = Date.now();
-    batches.forEach(({ pl, tracks }) => {
-      const pid = 'ncm-pl-' + pl.id;
-      let localPl = plById(pid);
-      if (localPl && localPl.provider !== 'netease') { skipped += 1; return; }
-      if (!localPl) {
-        localPl = { id: pid, name: pl.name || '未命名歌单', cover: pl.coverUrl || '', provider: 'netease', neteaseId: String(pl.id), neteaseUrl: 'https://music.163.com/#/playlist?id=' + encodeURIComponent(pl.id), syncedAt: now };
-        DB.playlists.push(localPl); added += 1;
-      } else {
-        localPl.name = pl.name || localPl.name;
-        if (!localPl.coverId) localPl.cover = pl.coverUrl || localPl.cover || '';
-        localPl.provider = 'netease'; localPl.neteaseId = String(pl.id);
-        localPl.neteaseUrl = 'https://music.163.com/#/playlist?id=' + encodeURIComponent(pl.id);
-        localPl.syncedAt = now; updated += 1;
-      }
-      (tracks || []).forEach((t) => {
-        const sid = 'ncm-s-' + pl.id + '-' + t.id;
-        let song = trackById(sid);
-        if (song && song.provider !== 'netease') { skipped += 1; return; }
-        const cover = song && song.coverId ? song.cover : (t.coverUrl || (song ? song.cover : '') || '');
-        if (!song) {
-          song = { id: sid, title: t.name || '未知歌曲', artist: t.artists || '', cover, src: '', pl: pid, like: false, provider: 'netease', neteaseId: String(t.id), neteasePlaylistId: String(pl.id), neteaseUrl: 'https://music.163.com/#/song?id=' + encodeURIComponent(t.id), syncedAt: now };
-          DB.songs.push(song); added += 1;
-        } else {
-          song.title = t.name || song.title; song.artist = t.artists || song.artist;
-          if (!song.coverId) song.cover = cover;
-          song.pl = pid; song.provider = 'netease'; song.neteaseId = String(t.id); song.neteasePlaylistId = String(pl.id);
-          song.neteaseUrl = 'https://music.163.com/#/song?id=' + encodeURIComponent(t.id); song.syncedAt = now; updated += 1;
-        }
-      });
-    });
-    if (!DB.cur && DB.songs.length) DB.cur = DB.songs[0].id;
-    if (!save()) {
-      DB.songs = before.songs; DB.playlists = before.playlists; DB.cur = before.cur; DB.sel = before.sel;
-      renderAll();
-      throw new Error('本地空间不够，同步未写入');
-    }
-    renderAll();
-    return { added, updated, skipped };
-  }
-  async function ncmSync() {
-    if (ncm.busy || !ncm.selected.size) return;
-    ncm.busy = true;
-    const sync = $('#neteaseSync');
-    if (sync) sync.disabled = true;
-    ncmStatus('正在同步所选歌单…');
-    try {
-      const ids = Array.from(ncm.selected);
-      const batches = [];
-      for (const id of ids) {
-        const pl = ncm.playlists.find((p) => String(p.id) === String(id));
-        if (!pl) continue;
-        const data = await ncmFetch('/api/netease/playlists/' + encodeURIComponent(id) + '/tracks');
-        batches.push({ pl, tracks: Array.isArray(data.tracks) ? data.tracks : [] });
-      }
-      const r = ncmApplySync(batches);
-      ncmStatus('同步完成：新增 ' + r.added + '，更新 ' + r.updated + (r.skipped ? '，跳过 ' + r.skipped : '') + '。');
-      toast('网易云歌单已同步');
-    } catch (e) { ncmStatus('同步失败：' + (e && e.message ? e.message : e)); }
-    finally { ncm.busy = false; ncmRenderList(); }
-  }
-  function ncmRemoveImported() {
-    const btn = $('#neteaseRemove');
-    if (!ncm.removeArmed) {
-      ncm.removeArmed = true;
-      if (btn) btn.textContent = '再点一次确认移除';
-      setTimeout(() => { ncm.removeArmed = false; if (btn) btn.textContent = '移除网易云同步内容'; }, 3500);
-      return;
-    }
-    ncm.removeArmed = false;
-    if (btn) btn.textContent = '移除网易云同步内容';
-    const before = { songs: DB.songs.map((s) => Object.assign({}, s)), playlists: DB.playlists.map((p) => Object.assign({}, p)), cur: DB.cur, sel: DB.sel };
-    const removedSongs = DB.songs.filter((s) => s.provider === 'netease');
-    const removedPls = DB.playlists.filter((p) => p.provider === 'netease');
-    if (!removedSongs.length && !removedPls.length) { toast('没有已同步的网易云内容'); return; }
-    if (DB.cur && removedSongs.some((s) => s.id === DB.cur)) stopAudio();
-    DB.songs = DB.songs.filter((s) => s.provider !== 'netease');
-    DB.playlists = DB.playlists.filter((p) => p.provider !== 'netease');
-    if (DB.cur && !trackById(DB.cur)) DB.cur = DB.songs[0] ? DB.songs[0].id : null;
-    if (DB.sel && !plById(DB.sel)) DB.sel = '';
-    if (!save()) {
-      DB.songs = before.songs; DB.playlists = before.playlists; DB.cur = before.cur; DB.sel = before.sel;
-      renderAll();
-      toast('本地空间不够，移除未写入');
-      return;
-    }
-    removedSongs.concat(removedPls).forEach((it) => { if (it.coverId) coverDelete(it.coverId); });
-    renderAll();
-    toast('已移除网易云同步内容');
-  }
-  function ncmSaveBase() {
-    const input = $('#neteaseBase');
-    const v = input ? input.value.trim() : '';
-    const old = ncm.base;
-    if (!v) { ncm.base = ncmDefaultBase(); }
-    else if (v === 'same-origin' || v === '/') { ncm.base = ''; }
-    else {
-      try {
-        const u = new URL(v);
-        if (u.protocol !== 'http:' && u.protocol !== 'https:') throw new Error('bad protocol');
-        ncm.base = u.origin;
-      } catch (e) { toast('后端地址要是 http(s) URL，或填 same-origin'); return; }
-    }
-    if (!ncmSaveConfig()) { toast('后端地址没存下'); return; }
-    if (old !== ncm.base) {
-      ncmClearSession();
-      ncm.transport = 'cookie';
-      ncm.health = null;
-      ncm.playlists = [];
-      ncm.selected.clear();
-      ncmStopQr();
-      ncmRenderList();
-    }
-    if (input) input.value = ncmBaseInputValue();
-    toast(ncm.base === ncmDefaultBase() ? '已恢复默认后端' : '后端地址已保存');
-    ncmRefreshHealth();
-  }
-  /* R221 · 站长自检：让 Worker 真打一次官方匿名登录，把上游 code 显示出来。
-     「公共参数校验失败」= 网易云 code 400，和 CORS / workers.dev 可达性无关。 */
-  async function ncmDiagnose() {
-    const out = $('#neteaseDiagOut');
-    const btn = $('#neteaseDiagnose');
-    if (out) { out.hidden = false; out.textContent = '正在自检（会真的请求一次网易云）…'; }
-    if (btn) btn.disabled = true;
-    try {
-      const d = await ncmFetch('/api/netease/diagnose', { method: 'POST' });
-      const up = d.upstream || {};
-      const lines = [
-        '结论：' + (d.verdict || '未知'),
-        'Worker 版本：' + (d.version || '?'),
-        '上游 code：' + (up.code === null || up.code === undefined ? '?' : up.code),
-        '上游消息：' + (up.message || '(空)'),
-        '拿到匿名 token：' + (up.gotAccessToken ? '是' : '否'),
-        '',
-        '已发送公共参数：',
-        JSON.stringify(d.sent || {}, null, 2),
-      ];
-      if (out) out.textContent = lines.join('\n');
-    } catch (e) {
-      if (out) out.textContent = '自检失败：' + (e && e.message ? e.message : e) + '\n\n如果提示 404 / not_found，说明 Worker 还是旧版本，请重新粘贴 R221 的 worker.mjs 并 Deploy。';
-    } finally { if (btn) btn.disabled = false; }
-  }
-  function bindNetease() {
-    ncmReadConfig();
-    ncmApplyFlag();
-    const btn = $('#neteaseBtn');
-    if (btn) btn.addEventListener('click', ncmOpen);
-    const close = $('#neteaseClose');
-    if (close) close.addEventListener('click', ncmClose);
-    const scrim = $('#neteaseScrim');
-    if (scrim) scrim.addEventListener('click', ncmClose);
-    const refresh = $('#neteaseRefresh');
-    if (refresh) refresh.addEventListener('click', ncmRefreshHealth);
-    const login = $('#neteaseLogin');
-    if (login) login.addEventListener('click', ncmLogin);
-    const logout = $('#neteaseLogout');
-    if (logout) logout.addEventListener('click', ncmLogout);
-    const all = $('#neteaseSelectAll');
-    if (all) all.addEventListener('change', () => {
-      ncm.selected.clear();
-      if (all.checked) ncm.playlists.forEach((p) => ncm.selected.add(p.id));
-      ncmRenderList();
-    });
-    const sync = $('#neteaseSync');
-    if (sync) sync.addEventListener('click', ncmSync);
-    const qrCancel = $('#neteaseQrCancel');
-    if (qrCancel) qrCancel.addEventListener('click', () => { ncmStopQr(); ncmStatus('已取消登录。'); });
-    const saveBase = $('#neteaseSaveBase');
-    if (saveBase) saveBase.addEventListener('click', ncmSaveBase);
-    const diagnose = $('#neteaseDiagnose');
-    if (diagnose) diagnose.addEventListener('click', ncmDiagnose);
-    const remove = $('#neteaseRemove');
-    if (remove) remove.addEventListener('click', ncmRemoveImported);
-    window.addEventListener('charcard-settings-change', ncmApplyFlag);
-    window.addEventListener('storage', (e) => {
-      if (e.key === NCM_SETTINGS_KEY) ncmApplyFlag();
-      if (e.key === NCM_CONFIG_KEY) ncmReadConfig();
-    });
-  }
-
   function bindUI() {
     $$('.tab').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab)));
     deckInner = $('#deckInner');
@@ -30327,7 +29669,7 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
     $$('[data-act="toggle"],[data-act="prev"],[data-act="next"]').forEach((b) => {
       b.addEventListener('click', () => {
         const a = b.dataset.act;
-        if (a === 'toggle') { playing ? pause() : play(true); }
+        if (a === 'toggle') { playing ? pause() : play(); }
         else if (a === 'prev') step(-1);
         else step(1);
       });
@@ -30353,7 +29695,6 @@ if (typeof window !== 'undefined') window.NotifyBridge = NotifyBridge;
       playing = false; renderIcon(); step(1);
     });
     bindLongPress();
-    bindNetease();
   }
 
   /* 老版本存在 localStorage 里的封面（整张 base64）：搬进 IndexedDB，然后重写一份小的 */
@@ -30664,7 +30005,7 @@ html[data-theme="dark"] #musicFloat{background:rgba(30,32,38,.92);box-shadow:0 1
     if (floatSuppressClick) { floatSuppressClick = false; return; }
     const hit = event.target.closest('[data-act]');
     const act = hit ? hit.dataset.act : '';
-    if (act === 'toggle') { playing ? pause() : play(true); renderIcon(); floatRender(); return; }
+    if (act === 'toggle') { playing ? pause() : play(); renderIcon(); floatRender(); return; }
     if (act === 'prev') { step(-1); floatRender(); return; }
     if (act === 'next') { step(1); floatRender(); return; }
     if (act === 'open') {
