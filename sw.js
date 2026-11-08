@@ -27,12 +27,17 @@ const DEDUPE_MS = 3000;
 const STALE_MS = 6 * 60 * 60 * 1000;
 
 let armedTimer = 0;
+let armedResolve = null;
 let sweeping = false;
+let sweepQueued = false;
+const inflight = new Set();
+let dbPromise = null;
 
 /* ---------------------------------------------------------------- IndexedDB */
 
 function openDb() {
-  return new Promise((resolve, reject) => {
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = () => {
       const db = req.result;
@@ -42,9 +47,21 @@ function openDb() {
         store.createIndex('state', 'state');
       }
     };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    req.onsuccess = () => {
+      const db = req.result;
+      db.onclose = () => { dbPromise = null; };
+      db.onversionchange = () => {
+        try { db.close(); } catch (_) {}
+        dbPromise = null;
+      };
+      resolve(db);
+    };
+    req.onerror = () => {
+      dbPromise = null;
+      reject(req.error);
+    };
   });
+  return dbPromise;
 }
 
 async function withStore(mode, fn) {
@@ -84,6 +101,7 @@ function normalizeTask(raw) {
     tag: String(task.tag || task.id || '').slice(0, 64),
     url: String(task.url || './').slice(0, 512),
     icon: typeof task.icon === 'string' ? task.icon : '',
+    badge: typeof task.badge === 'string' ? task.badge.slice(0, 512) : '',
     data: task.data && typeof task.data === 'object' ? task.data : {},
     /* 页面在前台时也强制弹系统通知（默认关闭：前台交给站内横幅） */
     forceSystem: task.forceSystem === true,
@@ -96,26 +114,43 @@ function normalizeTask(raw) {
 
 /* ------------------------------------------------------------------- 定时器 */
 
-function clearArmed() {
+function clearArmed(reason) {
   if (armedTimer) {
     clearTimeout(armedTimer);
     armedTimer = 0;
   }
+  if (armedResolve) {
+    const done = armedResolve;
+    armedResolve = null;
+    done(reason || 'cancel');
+  }
 }
 
-/** 把「离现在最近、且还没到点太久」的那一条挂到 setTimeout 上 */
+/**
+ * 抱住最近一条 ≤ MAX_HOLD_MS 的任务，直到它响（或被新任务打断重排）。
+ * 必须被 waitUntil 等着：光 setTimeout 不延长 SW 寿命，一切到后台就丢。
+ */
 async function arm() {
-  clearArmed();
-  const list = (await allTasks()).filter(t => t && t.state === 'pending');
-  if (!list.length) return;
-  list.sort((a, b) => a.at - b.at);
-  const next = list[0];
-  const delay = next.at - Date.now();
-  if (delay > MAX_HOLD_MS) return;   /* 太远，等下次唤醒再 arm */
-  armedTimer = setTimeout(() => {
-    armedTimer = 0;
-    fireTask(next.id);
-  }, Math.max(0, delay));
+  for (;;) {
+    const list = (await allTasks()).filter(t => t && t.state === 'pending');
+    if (!list.length) return;
+    list.sort((a, b) => a.at - b.at);
+    const next = list[0];
+    const delay = next.at - Date.now();
+    if (delay > MAX_HOLD_MS) return;
+    const reason = await new Promise(resolve => {
+      clearArmed('rearm');
+      armedResolve = resolve;
+      armedTimer = setTimeout(() => {
+        armedTimer = 0;
+        const done = armedResolve;
+        armedResolve = null;
+        if (done) done('tick');
+      }, Math.max(0, delay));
+    });
+    if (reason !== 'tick') continue;
+    await fireTask(next.id);
+  }
 }
 
 /* --------------------------------------------------------------- 派发通知 */
@@ -144,43 +179,59 @@ async function showNotificationFor(task) {
  *  - 页面前台可见 → postMessage 交给站内横幅（R201），不弹系统通知
  *  - 否则 → 弹系统通知；没权限 / 失败也记一笔，等页面回来补
  */
+function canDeliver(task) {
+  if (!task) return false;
+  if (task.state === 'pending') return true;
+  /* 上次派发做到一半 SW 被杀，超过去重窗口就当没发出去，允许补发 */
+  if (task.state === 'firing' && Date.now() - (task.firedAt || 0) > DEDUPE_MS) return true;
+  return false;
+}
+
 async function deliver(task) {
+  if (!canDeliver(task) || inflight.has(task.id)) return;
+  inflight.add(task.id);
   const now = Date.now();
-  const age = now - task.at;
-  if (age > STALE_MS) {
-    task.state = 'fired';
+  try {
+    task.state = 'firing';
     task.firedAt = now;
-    task.deliveredAs = 'stale';
+    await putTask(task);
+
+    const age = now - task.at;
+    if (age > STALE_MS) {
+      task.state = 'fired';
+      task.deliveredAs = 'stale';
+      await putTask(task);
+      broadcast({ type: 'task-fired', task });
+      return;
+    }
+
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const visible = windows.find(c => c.visibilityState === 'visible');
+
+    if (visible && !task.forceSystem) {
+      visible.postMessage({ type: 'due', task });
+      task.state = 'fired';
+      task.firedAt = Date.now();
+      task.deliveredAs = 'in-app';
+      await putTask(task);
+      broadcast({ type: 'task-fired', task }, visible);
+      return;
+    }
+
+    const ok = await showNotificationFor(task);
+    task.state = 'fired';
+    task.firedAt = Date.now();
+    task.deliveredAs = ok ? 'system' : 'failed';
     await putTask(task);
     broadcast({ type: 'task-fired', task });
-    return;
+  } finally {
+    inflight.delete(task.id);
   }
-
-  const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-  const visible = windows.find(c => c.visibilityState === 'visible');
-
-  if (visible && !task.forceSystem) {
-    visible.postMessage({ type: 'due', task });
-    task.state = 'fired';
-    task.firedAt = now;
-    task.deliveredAs = 'in-app';
-    await putTask(task);
-    broadcast({ type: 'task-fired', task }, visible);
-    return;
-  }
-
-  const ok = await showNotificationFor(task);
-  task.state = 'fired';
-  task.firedAt = now;
-  task.deliveredAs = ok ? 'system' : 'failed';
-  await putTask(task);
-  broadcast({ type: 'task-fired', task });
 }
 
 function fireTask(id) {
   return getTask(id).then(task => {
-    if (!task || task.state !== 'pending') return;
-    if (task.firedAt && Date.now() - task.firedAt < DEDUPE_MS) return;
+    if (!canDeliver(task)) return;
     return deliver(task);
   });
 }
@@ -189,14 +240,28 @@ function fireTask(id) {
 
 /** 过期任务立刻补发；剩下的重新挂定时器。所有入口都走这里。 */
 async function sweep() {
-  if (sweeping) return;
+  if (sweeping) {
+    sweepQueued = true;
+    clearArmed('nudge');
+    return;
+  }
   sweeping = true;
   try {
-    const list = (await allTasks()).filter(t => t && t.state === 'pending');
-    const now = Date.now();
-    const overdue = list.filter(t => t.at <= now).sort((a, b) => a.at - b.at).slice(0, 8);
-    for (const task of overdue) await deliver(task);
-    await arm();
+    do {
+      sweepQueued = false;
+      const list = await allTasks();
+      const now = Date.now();
+      const overdue = list
+        .filter(t => t && canDeliver(t) && t.at <= now)
+        .sort((a, b) => a.at - b.at)
+        .slice(0, 8);
+      for (const task of overdue) await deliver(task);
+      const staleFired = list.filter(t =>
+        t && t.state === 'fired' && now - (t.firedAt || 0) > STALE_MS
+      );
+      for (const task of staleFired) await deleteTask(task.id);
+      await arm();
+    } while (sweepQueued);
   } finally {
     sweeping = false;
   }
@@ -328,6 +393,10 @@ self.addEventListener('notificationclose', event => {
 /* Periodic Background Sync：装了 PWA 之后系统会隔一段时间叫醒一次，
    正好拿来当「扫表」的免费闹钟（别指望它的精度，Chrome 最短 12 小时）。 */
 self.addEventListener('periodicsync', event => {
+  if (event.tag === 'cg-notify-sweep') event.waitUntil(sweep());
+});
+
+self.addEventListener('sync', event => {
   if (event.tag === 'cg-notify-sweep') event.waitUntil(sweep());
 });
 
